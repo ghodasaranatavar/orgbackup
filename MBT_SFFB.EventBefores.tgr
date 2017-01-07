@@ -1,0 +1,23 @@
+Trigger EventBefores on Event(before insert, before update){
+  
+    Map<Id, List<Event>> whatIds = new Map<Id, List<Event>>{};
+
+    For (Event e : trigger.new){
+        If((e.WhatId == null))
+        {
+            continue;
+        }
+
+        if(whatIds.get(e.WhatId) == null){
+            whatIds.put(e.whatId, new list<Event>());
+        }
+        whatIds.get(e.WhatId).add(e);
+    }
+
+    For (pba_Listing__c a : [Select PropertyOwnerEmail__c   from pba_Listing__c where Id in :whatIDs.keySet()]){
+        For(Event e : whatIds.get(a.id)){
+            e.ActPropertyOwnerEmail__c = a.PropertyOwnerEmail__c;
+            
+        }
+    }
+}

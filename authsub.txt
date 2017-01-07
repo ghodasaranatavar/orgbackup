@@ -1,0 +1,22 @@
+<apex:page controller="Sendpostrequest" action="{!doOnLoad}">
+
+<apex:sectionHeader title="Google Authorization"
+ subtitle="Calendar"/>
+ <!--display this block only if we have a code-->
+ <apex:pageblock title="Authorization Status"
+ rendered="{!NOT(ISBLANK(code))}">
+ <apex:pageblocksection columns="1">
+ <apex:pagemessages /> 
+ 
+ </apex:pageblocksection> 
+  <apex:repeat value="{!Listofevent}" var="a" id="list">
+   <tr>
+   <td>{!a}</td>
+   </tr>
+  </apex:repeat>
+ </apex:pageblock>
+<apex:form id="theForm" rendered="{!ISBLANK(code)}">
+ <!--no change in form-->
+
+ </apex:form>
+</apex:page>

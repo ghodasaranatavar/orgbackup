@@ -1,0 +1,142 @@
+<apex:page controller="pagehome">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/bootstrap.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/bootstrap-theme.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/advancecss.css')}" />
+<script type="text/javascript" src="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/js/bootstrap.js')}"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+function getpostsjs()
+{
+    pagehome.getposts('page-0001',function(result, event){
+        if (event.status) 
+        {
+            if((result!=undefined))
+            {
+                // result have some values
+            }
+        }
+    }, {escape:true});
+}
+$(document).ready(function() {
+getpostsjs();
+});
+</script>
+<apex:sectionheader title="Share with Socials" subtitle="Facebook"></apex:sectionheader>
+<apex:form id="theForm"> 
+<div class="row  bPageBlock bPagespace">
+         <div class="col-md-9">         
+             <div class="panel">                               
+                 <div class="panel-body">
+                     <div class="col-md-3">
+                         <div class="profile-thumb" style="margin-top:80px;">
+                           <!--  <img src="{!profilepic}"/>-->
+                         </div>
+                     </div>
+                     <div class="col-md-6">                     
+                         <input type="text" id="txtpost" name="txtpost"/>
+                         <!--<a class="btn btn-info pull-right" style="padding-right:5px; vertical-align:center;" id="btn_share" onclick="share()" href="#">Share</a>-->
+                     </div>
+                     <!--<a href="#" class="fb-user-mail">{!ownemail}</a>-->
+                 </div>                 
+             </div>
+                <div class="panel">                               
+                 <div class="panel-body">
+                   <div class="fb-user-thumb">
+                                  <img src="img/pro-ac-1.png" alt="" />
+                              </div>
+                              <div class="fb-user-details">
+                                  <h3><a href="#" class="#">Margarita Elina</a></h3>
+                                  <p>7 minutes ago near Alaska, USA</p>
+                              </div>
+                              <div class="clearfix"></div>
+                              <p class="fb-user-status">John is world famous professional photographer.  with forward thinking clients to create beautiful, honest and amazing things that bring positive results. John is world famous professional photographer.  with forward thinking clients to create beautiful, honest and amazing things that bring positive results.
+                              </p>
+                              <div class="fb-status-container fb-border">
+                                  <div class="fb-time-action">
+                                      <a href="#" title="Like this">Like</a>
+                                      <span>-</span>
+                                      <a href="#" title="Leave a comment">Comments</a>
+                                      <span>-</span>
+                                      <a href="#" title="Send this to friend or post it on your time line">Share</a>
+                                  </div>
+                              </div>
+                              <div class="fb-status-container fb-border fb-gray-bg">
+                                  <div class="fb-time-action like-info">
+                                      <a href="#">Jhon Due,</a>
+                                      <a href="#">Danieal Kalion</a>
+                                      <span>and</span>
+                                      <a href="#">40 more</a>
+                                      <span>like this</span>
+                                  </div>
+                                  <ul class="fb-comments">
+                                      <li>
+                                          <a href="#" class="cmt-thumb">
+                                              <img src="img/mail-avatar.jpg" alt="" />
+                                          </a>
+                                          <div class="cmt-details">
+                                              <a href="#">Jhone due</a>
+                                              <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
+                                              <p>40 minutes ago - <a href="#" class="like-link">Like</a></p>
+                                          </div>
+                                      </li>
+                                      <li>
+                                          <a href="#" class="cmt-thumb">
+                                              <img src="img/follower-avatar.jpg" alt="" />
+                                          </a>
+                                          <div class="cmt-details">
+                                              <a href="#">Tawseef</a>
+                                              <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
+                                              <p>34 minutes ago - <a href="#" class="like-link">Like</a></p>
+                                          </div>
+                                      </li>
+
+                                      <li>
+                                          <a href="#" class="cmt-thumb">
+                                              <img src="img/mail-avatar.jpg" alt="" />
+                                          </a>
+                                          <div class="cmt-details">
+                                              <a href="#">Jhone due</a>
+                                              <span> is world famous professional photographer.   </span>
+                                              <p>15 minutes ago - <a href="#" class="like-link">Like</a></p>
+                                          </div>
+                                      </li>
+                                      <li>
+                                          <a href="#" class="cmt-thumb">
+                                              <img src="img/follower-avatar.jpg" alt="" />
+                                          </a>
+                                          <div class="cmt-details">
+                                              <a href="#">Tawseef</a>
+                                              <span> thinking clients to create beautiful world famous professional photographer.</span>
+                                              <p>2 minutes ago - <a href="#" class="like-link">Like</a></p>
+                                          </div>
+                                      </li>
+                                      <li>
+                                          <a href="#" class="cmt-thumb">
+                                              <img src="img/follower-avatar.jpg" alt="" />
+                                          </a>
+                                          <div class="cmt-form">
+                                              <textarea class="form-control" placeholder="Write a comment..." name=""  ></textarea>
+                                          </div>
+                                      </li>
+                                  </ul>
+                                  <div class="clearfix"></div>
+                              </div>                                 
+                 </div>                 
+             </div>
+         </div>   
+             
+         
+         <div class="col-md-3">
+         
+             <div class="panel">
+                 <div class="panel-heading">
+                 </div>
+                 <div class="panel-body">
+                 </div>
+             </div>
+         
+         </div>    
+    </div>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,170 @@
+<apex:page controller="AccountController" id="accountcontrollerpage" >
+<head>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyBwZGIgzouNIadi89slWs3MSkrNDqEOWHE"></script>
+</head>
+<apex:form id="accountform" >
+
+<div style="display:none">
+ <apex:pageBlock id="pgblockid">   
+   <apex:variable var="sr" value="{!0}"/>    
+   <table id="table1">
+   
+   <apex:repeat value="{!ListOfAccounts}" var="a" id="list">
+   <tr id="tr{!sr}">
+   <apex:variable var="tdcount" value="{!0}"/>
+   <td id="tr{!sr}td{!tdcount}">
+   {!sr}</td>
+   <apex:variable var="tdcount" value="{!tdcount+ 1}"/>
+   <td id="tr{!sr}td{!tdcount}">{!a.name}</td>
+   <apex:variable var="tdcount" value="{!tdcount+ 1}"/>
+   <td id="tr{!sr}td{!tdcount}">{!a.type}</td>
+      <apex:variable var="tdcount" value="{!tdcount+ 1}"/>
+   <td id="tr{!sr}td{!tdcount}">{!a.billingstreet},{!a.billingCity},{!a.BillingState},{!a.billingCountry}</td>         
+   <apex:variable var="sr" value="{!sr + 1}"/>
+   </tr>
+   </apex:repeat>
+   </table>
+      
+  </apex:pageBlock>
+  </div>
+  <script>
+  $(document).ready(function() {
+  // row access  
+  var rowcount = $("#table1 tr").length;
+  var json='[';
+  for(var i=0;i<rowcount;i++)
+  {
+        // rowcounter 
+            json=json+'{';
+          var totalcolcount=4;
+          for(var colcount=0;colcount<totalcolcount;colcount++)
+          {
+              var value1=  document.getElementById("tr"+i+"td"+colcount).innerHTML;
+              if(colcount==0)
+              {                  
+                  json=json+'"ID"'+':'+value1;
+               json=json+',';
+                 
+              }
+              else if(colcount==1)
+              {
+                 json=json+'"NAME"'+':'+'"'+value1+'"';
+                 json=json+',';
+              }
+              else if(colcount==2)
+              {
+                 json=json+'"TYPE"'+':'+'"'+value1+'"';
+                 json=json+',';
+              }
+              else if(colcount==3)
+              {
+                  json=json+'"ADDRESS"'+':'+'"'+value1+'"';
+                  json=json+'}'; 
+              }                 
+                 
+          }
+          if(!(i==(rowcount-1)))
+          {
+              json=json+",";
+          }
+          
+  }
+   json=json+']'; 
+  
+ 
+  var obj = JSON.parse(json);   
+  //console.log(obj);
+    var addresses=[];
+    var type=[];
+    var name=[];
+    for(var l=0;l<obj.length;l++)
+    {
+       addresses.push(obj[l].ADDRESS);
+       type.push(obj[l].TYPE);
+       name.push(obj[l].NAME);
+    }    
+   
+    var map;
+    var elevator;
+    var myOptions = {
+        zoom: 7,
+        center: new google.maps.LatLng(23.022505, 72.5713621),
+        mapTypeId: 'terrain'
+    };
+    map = new google.maps.Map($('#map_canvas')[0], myOptions);  
+
+
+function doSetTimeout(add,nameofaccount,typeofaccount) {
+  setTimeout(function() { 
+          $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address='+add+'&sensor=false', null, function (data) {
+          if(typeofaccount=='Prospect')
+          {
+          if(data.results[0])
+              {
+var infowindow = new google.maps.InfoWindow;
+                var contentString = '<div id="content"><h3 id="firstHeading" class="firstHeading">'+nameofaccount+'</h3><div id="bodyContent"><p>'+add+'</p></div></div>';
+                var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+                var p = data.results[0].geometry.location
+                var latlng = new google.maps.LatLng(p.lat, p.lng);
+                  var marker =  new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        icon:'https://icons.iconarchive.com/icons/icons-land/vista-map-markers/32/Map-Marker-Marker-Outside-Pink-icon.png'
+                        });
+                         marker.addListener('click', function() {
+          infowindow.open(map, marker);
+           });
+               }
+                         }
+          else
+          {
+              if(data.results[0])
+              {
+               var infowindow = new google.maps.InfoWindow;
+                var contentString = '<div id="content"><h3 id="firstHeading" class="firstHeading">'+nameofaccount+'</h3><div id="bodyContent"><p>'+add+'</p></div></div>';
+                var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+                var p = data.results[0].geometry.location;
+                var latlng = new google.maps.LatLng(p.lat, p.lng);
+                  var marker =  new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        icon:'https://icons.iconarchive.com/icons/icons-land/vista-map-markers/32/Map-Marker-Marker-Outside-Azure-icon.png'
+                        });
+                        marker.addListener('click', function() {
+              infowindow.open(map, marker);
+        });
+               }
+               
+          }
+          
+        });
+   }, 100);
+}
+
+    for (var x = 0; x < addresses.length;x++) {
+      doSetTimeout(addresses[x],name[x],type[x]);
+    }
+        
+});
+  </script>
+  <apex:pageBlock >
+  <table>
+  <tr>
+  <td colspan="2"><h3>All Accounts Location.</h3></td>
+  </tr>
+  <tr>
+  <td><apex:image id="img_customers" value="https://icons.iconarchive.com/icons/icons-land/vista-map-markers/32/Map-Marker-Marker-Outside-Azure-icon.png"/> - Customer OR Others
+</td>
+  <td><apex:image id="img_prospect" value="https://icons.iconarchive.com/icons/icons-land/vista-map-markers/32/Map-Marker-Marker-Outside-Pink-icon.png"/> - Prospect</td>
+  </tr>
+  </table>
+  <div id="map_canvas" style="height:300px;width:1200px"></div>
+  </apex:pageBlock>
+</apex:form>
+</apex:page>

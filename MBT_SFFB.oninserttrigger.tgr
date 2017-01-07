@@ -1,0 +1,26 @@
+trigger oninserttrigger on pba_Request__c (before insert, before update) {
+
+if(trigger.isInsert)
+{
+for(pba_Request__c obj2:trigger.new)
+    {
+       List<pba_Listing__c> obj2str= [SELECT refno1__c,refno2__c,sales_advisor_user__c FROM pba_Listing__c WHERE refno1__c =: obj2.refno1__c LIMIT 1];
+        if(obj2.OwnerId != null)
+        {
+            obj2.OwnerId=obj2str[0].sales_advisor_user__c;
+        }
+    }
+ }
+ else
+ {
+     for(pba_Request__c obj2:trigger.new)
+    {
+       List<pba_Listing__c> obj2str= [SELECT refno1__c,refno2__c,sales_advisor_user__c FROM pba_Listing__c WHERE refno1__c =: obj2.refno1__c LIMIT 1];
+        if(obj2.OwnerId != null)
+        {
+            obj2.OwnerId=obj2str[0].sales_advisor_user__c;
+        }
+    }
+ }
+  
+}

@@ -1,0 +1,36 @@
+trigger TaskConversationCount on task(after insert, after update, 
+                                        after delete,after Undelete) {    
+
+    set<Id> set_Id = new set<Id>();
+   
+    List<pba_Request__c> REQ = new List<pba_Request__c>();
+    
+    if(Trigger.isInsert || Trigger.isUpdate) {
+        for(Task T:trigger.new){
+            set_Id.add(T.WhatId);
+        }
+
+     }
+    else if(Trigger.isDelete){
+        for(Task T:Trigger.old){
+            if(set_id.size()>0) {
+            set_Id.add(T.WhatId);
+            }
+        }
+
+     }
+     
+    if(Trigger.isAfter && (Trigger.isUpdate || Trigger.isInsert || Trigger.isDelete)){
+        REQ =[SELECT Id, no_of_activities__c , (SELECT Id FROM Tasks) FROM pba_Request__c WHERE Id IN :set_Id];
+
+     for(pba_Request__c acc: REQ){
+        if(acc.Tasks.size()>0)
+            acc.no_of_activities__c  = acc.Tasks.size();
+        else
+            acc.no_of_activities__c  = 0;
+     }
+        if(!REQ.isEmpty())
+            update REQ;
+        }
+
+}

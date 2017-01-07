@@ -1,0 +1,92 @@
+<apex:page standardController="Account">
+<head>
+<script type="text/javascript"
+src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" 
+src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> 
+<script type="text/javascript"> 
+$(document).ready(function() {
+
+  var myOptions = {
+    zoom: 15,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControl: false
+  }
+
+  var map;
+  var marker;
+
+  var geocoder = new google.maps.Geocoder();
+  var address = "{!Account.BillingStreet},{!Account.BillingCity}, {!Account.BillingPostalCode}, {!Account.BillingCountry}";
+
+  var infowindow = new google.maps.InfoWindow({
+    content: "<b>{!Account.Name}</b><br>{!Account.BillingStreet}<br>{!Account.BillingCity}, {!Account.BillingPostalCode}<br>{!Account.BillingCountry}"
+  });
+
+  geocoder.geocode( { address: address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK && results.length) {
+      if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+
+        //create map
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+        //center map
+        map.setCenter(results[0].geometry.location);
+
+        //create marker
+        marker = new google.maps.Marker({
+            position: results[0].geometry.location,
+            map: map,
+            title: "{!Account.Name}"
+        });
+
+        //add listeners
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+        });
+        google.maps.event.addListener(infowindow, 'closeclick', function() {
+          map.setCenter(marker.getPosition()); 
+        });
+
+      }
+
+    } else {
+      $('#map_canvas').css({'height' : '15px'});
+      $('#map_canvas').html("Oops! {!Account.Name}'s billing address could not be found,please make sure the address is correct.");
+      resizeIframe();
+    }
+  });
+
+  function resizeIframe() {
+    var me = window.name;
+    if (me) {
+      var iframes = parent.document.getElementsByName(me);
+      if (iframes && iframes.length == 1) {
+        height = document.body.offsetHeight;
+        iframes[0].style.height = height + "px";
+      }
+    }
+  }
+
+});
+</script>
+<style>
+#map_canvas{
+  font-family: Arial;
+  font-size:12px;
+  line-height:normal !important;
+  background:transparent;
+}
+</style>
+</head> 
+<apex:form id="accountform">
+   <apex:pageBlock >
+    <apex:pageBlockSection title="{! Account.Name } Location">
+    <!-- Display the text version of the address -->        
+    <div id="map_canvas" style="height:500px;width:1000px"></div>
+    <!-- Display the address on a map -->
+    <!--<apex:map width="600px" height="400px" mapType="roadmap" zoomLevel="17" center="{!Account.BillingStreet},{!Account.BillingCity},{!Account.BillingState}"></apex:map>-->
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+</apex:form>
+</apex:page>

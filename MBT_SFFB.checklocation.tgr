@@ -1,0 +1,17 @@
+trigger checklocation on test__c (after insert, after update) {
+if(trigger.isInsert)
+{
+ // insert new location
+ String latlong='';
+  for (test__c t1 : trigger.new) 
+    {  
+   
+         ClassGoogleGeoLocationCallout.getlocationlatlong(string.valueof(t1.address__c),t1.id);
+        
+     }
+}
+else
+{
+// update
+}
+}

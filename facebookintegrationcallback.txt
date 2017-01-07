@@ -1,0 +1,17 @@
+<apex:page controller="facebookIntegrationCallback" action="{!redirecttohome}" id="facebookintegrationcallback">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/bootstrap.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/bootstrap-theme.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/advancecss.css')}" />
+<script type="text/javascript" src="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/js/bootstrap.js')}"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<div>
+    <apex:sectionheader title="Share with Socials" subtitle="Facebook"></apex:sectionheader>
+    <div class="row  bPageBlock">
+        <div class="col-md-12">
+        <div class="alert alert-block alert-success">You will be redirected soon to the Facebook Profile page.</div>
+        </div>
+     </div>
+</div>
+</apex:page>
+             

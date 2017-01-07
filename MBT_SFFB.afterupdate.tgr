@@ -1,0 +1,47 @@
+trigger afterupdate on Event (after insert, after update) 
+{
+    list<event> Eve = new list<event>();
+      set<Id> set_Id = new set<Id>();
+      list<eventtest__c> objeventtest = new list<eventtest__c>();
+      map<string,event> eventmap = new map<string,event>();
+    if(trigger.Isinsert) 
+    {
+         for(Event Eve1: Trigger.new)
+         {
+            if(Eve1.recordTypeId == '01228000000vnfN' || Eve1.RecordTypeId == '01228000000p1oz')
+            {
+                Eve.add(Eve1);
+            }        
+            if(Eve.Isempty() == False)
+            {
+                eventtest__c envtestobj = new eventtest__c(Contact__c=Eve1.WhoId,Listing_Namewhatid__c=Eve1.WhatId,EventRecordTypeId__c=Eve1.RecordTypeId,Eventid__c=Eve1.Id);
+                insert envtestobj;
+             }
+         }
+     }
+     else
+     {
+        for(Event Eve1: Trigger.new)
+         {
+            if(Eve1.recordTypeId == '01228000000vnfN' || Eve1.RecordTypeId == '01228000000p1oz')
+            {
+                eventmap.put(Eve1.id,Eve1);
+            }
+             }
+            objeventtest =[SELECT Contact__c,Listing_Namewhatid__c,EventRecordTypeId__c,Eventid__c FROM eventtest__c where Eventid__c= :eventmap.KeySet()];
+            List<eventtest__c> eventtestUpdateList = new List<eventtest__c>();
+    for(eventtest__c c: objeventtest)
+    {
+        Event eventobj = eventmap.get(c.Eventid__c);
+        c.Contact__c= eventobj.WhoId;
+        c.Listing_Namewhatid__c= eventobj.WhatId;
+        c.EventRecordTypeId__c= eventobj.RecordTypeId;
+        eventtestUpdateList.add(c);
+    } 
+    if(eventtestUpdateList.size() > 0)
+    {
+        update eventtestUpdateList ;
+    }
+        
+     }
+}

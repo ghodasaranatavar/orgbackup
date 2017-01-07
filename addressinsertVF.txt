@@ -1,0 +1,20 @@
+<apex:page standardcontroller="test__c" extensions="ListingGoogleAddress1">
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+      
+       <script>
+       function initialize() {
+       var input = document.getElementById('{!$Component.myform.test123}'); 
+       new google.maps.places.Autocomplete(input); 
+              }         
+       google.maps.event.addDomListener(window, 'load', initialize);
+       
+       </script>
+
+ <apex:form id="myform">
+ 
+ <apex:inputText id="test123" value="{!input}" onkeyup="initialize();"></apex:inputText>
+ 
+<apex:commandButton value="Save" action="{!save}"/>
+
+ </apex:form>
+</apex:page>

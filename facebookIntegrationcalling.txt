@@ -1,0 +1,59 @@
+<apex:page controller="facebookIntegrationCalling">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/bootstrap.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/bootstrap-theme.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/css/advancecss.css')}" />
+<script type="text/javascript" src="{!URLFOR($Resource.Bootstrapcssandjs, 'bootstrapcssandjs/js/bootstrap.js')}"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<apex:form id="callingfacebookform">
+<script>
+function getclientcodejs()
+{
+    facebookIntegrationCalling.getclientid(function(result, event){
+        if (event.status) 
+        {
+            if((result!='Null'))
+            {
+               
+                document.getElementById("hyperlink").innerHTML='<a href=https://www.facebook.com/v2.8/dialog/oauth?client_id='+result+'&redirect_uri=https://c.ap2.visual.force.com/apex/facebookintegrationcallback&scope=public_profile,email,user_friends,manage_pages,publish_pages class="btn btn-primary">Login to Facebook</a>';
+            }
+            else
+            {
+                
+                document.getElementById("hyperlink").innerHTML='<div class="alert alert-block alert-danger fade in"><strong>Config Setting !</strong> Please Insert Record in Facebook oAuth Setting !</div>'; 
+            }
+        }
+    }, {escape:true});
+}
+$(document).ready(function() {
+getclientcodejs();
+});
+</script> 
+<apex:sectionheader title="Share with Socials" subtitle="Facebook"></apex:sectionheader>
+
+    <div class="row  bPageBlock">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">                    
+                    <div class="row">
+                        <table>
+                             <tr>                            
+                                <td>
+                                    <ul>
+                                        <li>Share Content directly from salesforce.</li>
+                                        <li>Engage with posts that leverage your ROI.</li>                                                                    
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="hyperlink"></td>
+                            </tr>                        
+                        </table>
+                    </div>                    
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+</apex:form>
+</apex:page>

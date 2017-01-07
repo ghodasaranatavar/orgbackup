@@ -1,0 +1,56 @@
+trigger EventBefore on Event (before insert, before update) {
+if(trigger.isInsert)
+{
+Map<ID,String> contactemail = new Map<ID,String>();
+List<Event> conEvents = new List<Event>();
+Map<ID,String> contactphone = new Map<ID,String>();
+Map<ID,String> contactName = new Map<ID,String>();
+
+    for (Event e : trigger.new) 
+    {   
+        if (e.whoID!= null && (String.valueOf(e.whoID)).startsWith('003'))  
+        {
+            contactName.put(e.whoID,'');
+            contactemail.put(e.whoID,'');            
+            contactphone.put(e.whoID,'');
+            conEvents.add(e);
+        }
+    }
+    for (contact con : [SELECT Name,Email,Phone FROM contact WHERE ID IN :contactemail.keySet()]) 
+    {
+    contactName.put(con.id,con.Name);
+    contactemail.put(con.id,con.Email);
+    contactphone.put(con.id,con.Phone);
+    }
+
+for (Event e : trigger.new) 
+    {
+    e.Description = contactName.get(e.whoID)+' '+contactemail.get(e.whoID)+' ' +contactphone.get(e.whoID);
+    }
+      
+}
+else
+{
+ Set<id> WhoIds= new Set<id>();
+ for (Event e : Trigger.new){
+
+     if (Trigger.oldMap.get(e.Id).WhoId != Trigger.newMap.get(e.Id).WhoId)
+            {
+                if (e.whoID!= null && (String.valueOf(e.whoID)).startsWith('003'))  
+                {
+                     WhoIds.add(e.WhoId);
+                }
+            }
+    }
+    Map<id, contact> who = new Map<id, contact>([SELECT Name,Email,Phone FROM contact WHERE ID in :WhoIDs]);
+    for (Event a : Trigger.new)
+    {
+     if (!who.isEmpty()&& who.ContainsKey(a.WhoId))
+     {
+                    a.Description= who.get(a.WhoId).Name+' '+who.get(a.WhoId).Email+' '+who.get(a.WhoId).Phone;
+
+     }
+    }
+
+}
+}

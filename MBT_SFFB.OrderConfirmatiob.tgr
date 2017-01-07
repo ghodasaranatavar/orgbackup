@@ -1,0 +1,25 @@
+trigger OrderConfirmatiob on Order (before insert) {
+        
+        for(Order o : Trigger.New) {
+        if(o.Contact_Email__c != NULL){
+   
+          List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();                    
+ 
+            String[] toAddresses = new String[] {o.Contact_Email__c};
+ 
+            mail.setToAddresses(toAddresses);
+ 
+            mail.setSubject('Automated email: Order Confirmation');
+            //mail.setTargetObjectId(o.Id);
+            //mail.setSaveAsActivity(false);
+            mail.setHtmlBody('Salesforce Email for order conformation !!' );
+            //mail.setTemplateId(et.Id);
+
+         emails.add(mail);
+         Messaging.sendEmail(emails);
+              //Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
+
+        }
+       }
+    }

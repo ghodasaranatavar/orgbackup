@@ -1,0 +1,28 @@
+trigger parsingtrigger on LHBuyerCase__c (before insert,before update) {
+for (LHBuyerCase__c c: Trigger.new) 
+    {        
+        if (c.Description__C != null) 
+        {  
+    
+            Pattern emailPattern = Pattern.compile('(?i)^([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4})$'); 
+            Boolean foundEmailMatch = false; 
+            for (String bit: c.Description__C.split('\r\n')) 
+            {  
+                for(String splited: bit.split(' '))
+                {
+                    Matcher emailMatcher = emailPattern.matcher(splited);
+                    if (emailMatcher.matches()) 
+                    {
+                        foundEmailMatch = true;  
+                        c.Searchtext__c = splited;   
+                    }
+                } 
+            }    
+            if (!foundEmailMatch) 
+            {
+                 c.Searchtext__c =null;
+            }
+        }
+    }
+
+}

@@ -1,0 +1,17 @@
+trigger assignuserbasedonrole on pba_Listing__c (before insert) 
+{    Set<ID> setRoleUtils = new Set<ID>();   
+    List<User> listuser= new List<User>([SELECT Id,Name,UserRoleId FROM User WHERE IsActive = true ORDER BY Id ASC]);  
+    for(User u :listuser)
+    {
+      setRoleUtils = RoleUtils.getRoleSubordinateUsers(u.id);
+    }  
+   
+     
+ 
+     for(pba_Listing__c listingobj: trigger.new){
+     
+    // listingobj.Userrelation__c=
+      
+        
+    }
+}
